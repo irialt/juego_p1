@@ -2,10 +2,9 @@
 var player;
 var stars;
 var bombs;
-var platforms;
 var cursors;
-var score = 0;
-var gameOver = false;
+var score;
+var gameOver;
 var scoreText;
 
 // Clase Play, donde se crean todos los sprites, el escenario del juego y se inicializa y actualiza toda la logica del juego.
@@ -58,30 +57,10 @@ export class Play extends Phaser.Scene {
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
 
-    //  Our player animations, turning, walking left and walking right.
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
-      frameRate: 20,
-    });
-
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
     //  Input Events
-    cursors = this.input.keyboard.createCursorKeys();
-    console.log(cursors);
+    if ((cursors = !undefined)) {
+      cursors = this.input.keyboard.createCursorKeys();
+    }
 
     // Create empty group of starts
     stars = this.physics.add.group();
@@ -122,6 +101,9 @@ export class Play extends Phaser.Scene {
     this.physics.add.overlap(player, stars, this.collectStar, null, this);
 
     this.physics.add.collider(player, bombs, this.hitBomb, null, this);
+
+    gameOver = false;
+    score = 0;
   }
 
   update() {
