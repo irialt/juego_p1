@@ -1,7 +1,8 @@
-// Clase Boton, para no repetir tanto codigo
+//para no repetir tanto código
 class Button {
     constructor(x, y, label, scene, callback) {
-        const button = scene.add.text(x, y, label)
+        const button = scene.add
+            .text(x, y, label)
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ 

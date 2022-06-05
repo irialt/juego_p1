@@ -1,0 +1,62 @@
+{
+	"textures": [
+		{
+			"image": "atlas2_plataform.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 64,
+				"h": 32
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "platform2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					}
+				},
+				{
+					"filename": "platform2side.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					},
+					"frame": {
+						"x": 32,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:95a8a1f30d555e985014f60f7aebf4fb:d8aee8df0c0c17fe63a0fc070f126934:726bcd36e7e5f4595aecfc8569ff11b6$"
+	}
+}

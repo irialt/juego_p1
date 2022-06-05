@@ -1,6 +1,7 @@
 // Declaracion de variables para esta escena
 var player;
 var stars;
+var burger; //objeto adicional
 var bombs;
 var cursors;
 var score;
@@ -15,25 +16,22 @@ export class Play extends Phaser.Scene {
   }
 
   preload() {
-    this.load.tilemapTiledJSON("map", "public/assets/tilemaps/map.json");
-    this.load.image("tilesBelow", "public/assets/images/sky_atlas.png");
-    this.load.image("tilesPlatform", "public/assets/images/platform_atlas.png");
+    this.load.tilemapTiledJSON("map", "public/assets/tilemaps/spongeboblevel1.json");
+    this.load.image("fondonivel", "public/assets/images/sky2.png");
+    this.load.image("platform", "public/assets/images/platform_atlas2.png");
   }
 
   create() {
-    const map = this.make.tilemap({ key: "map" });
-
-    // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
-    // Phaser's cache (i.e. the name you used in preload)
-    const tilesetBelow = map.addTilesetImage("sky_atlas", "tilesBelow");
-    const tilesetPlatform = map.addTilesetImage(
-      "platform_atlas",
-      "tilesPlatform"
+    const map = this.make.tilemap({ key: "map" });   
+    const tilesetBelow = map.addTilesetImage("sky2", "fondonivel"); // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
+    const tilesetPlatform = map.addTilesetImage(                         // Phaser's cache (i.e. the name you used in preload)
+      "platform_atlas2",
+      "platform"
     );
 
     // Parameters: layer name (or index) from Tiled, tileset, x, y
-    const belowLayer = map.createLayer("Fondo", tilesetBelow, 0, 0);
-    const worldLayer = map.createLayer("Plataformas", tilesetPlatform, 0, 0);
+    const belowLayer = map.createLayer("sky2", tilesetBelow, 0, 0); //o era al reves dsp m fijo
+    const worldLayer = map.createLayer("plataform_atlas2", tilesetPlatform, 0, 0);
     const objectsLayer = map.getObjectLayer("Objetos");
 
     worldLayer.setCollisionByProperty({ collides: true });
@@ -54,7 +52,7 @@ export class Play extends Phaser.Scene {
     player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
 
     //  Player physics properties. Give the little guy a slight bounce.
-    player.setBounce(0.2);
+    player.setBounce(0);
     player.setCollideWorldBounds(true);
 
     //  Input Events
@@ -72,7 +70,7 @@ export class Play extends Phaser.Scene {
 
       const { x = 0, y = 0, name, type } = objData;
       switch (type) {
-        case "stars": {
+        case "star": {
           // add star to scene
           // console.log("estrella agregada: ", x, y);
           var star = stars.create(x, y, "star");
@@ -82,24 +80,42 @@ export class Play extends Phaser.Scene {
       }
     });
 
-    // Create empty group of bombs
+
+       burger = this.physics.add.group();  //objeto adicional
+       objectsLayer.objects.forEach((objData) => {
+        
+         const { x = 0, y = 0, name, type } = objData;
+         switch (type) {
+           case "burger": {
+            
+             var star = burger.create(x, y, "burger");
+             star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+             break;
+           }
+         }
+       });
+
+
+    // group of bombs
     bombs = this.physics.add.group();
 
+    
     //  The score
     scoreText = this.add.text(30, 6, "score: 0", {
       fontSize: "32px",
-      fill: "#000",
+      fill: "##FFFFFF", //black text
     });
 
     // Collide the player and the stars with the platforms
     // REPLACE Add collision with worldLayer
     this.physics.add.collider(player, worldLayer);
     this.physics.add.collider(stars, worldLayer);
+    this.physics.add.collider(burger, worldLayer); //objeto adicional
     this.physics.add.collider(bombs, worldLayer);
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     this.physics.add.overlap(player, stars, this.collectStar, null, this);
-
+    this.physics.add.overlap(player, burger, this.collectStar, null, this); //objeto adicional
     this.physics.add.collider(player, bombs, this.hitBomb, null, this);
 
     gameOver = false;
@@ -107,6 +123,12 @@ export class Play extends Phaser.Scene {
   }
 
   update() {
+   //pasar a level2
+
+   if (burger.countActive(true) === 0 && stars.countActive(true) === 0 ) {
+    this.scene.start("level2", { score: score });  
+   }
+
     if (gameOver) {
       return;
     }
@@ -137,26 +159,24 @@ export class Play extends Phaser.Scene {
     //  Add and update the score
     score += 10;
     scoreText.setText("Score: " + score);
-
-    if (stars.countActive(true) === 0) {
-      //  A new batch of stars to collect
-      stars.children.iterate(function (child) {
-        child.enableBody(true, child.x, child.y + 10, true, true);
-      });
-
-      var x =
-        player.x < 400
-          ? Phaser.Math.Between(400, 800)
-          : Phaser.Math.Between(0, 400);
-
-      var bomb = bombs.create(x, 16, "bomb");
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-    }
   }
+    //if (stars.countActive(true) === 0) { //  A new batch of stars to collect
+    
+   //   stars.children.iterate(function (child) {
+   // child.enableBody(true, child.x, child.y + 10, true, true);
+      
 
-  hitBomb(player, bomb) {
+ collectburger(player, burger) //objeto adicional
+ {   
+        burger.disableBody(true, true);
+        score += 15;
+        scoreText.setText("Score: " + score);
+
+  }
+  
+
+  hitBomb(player, bomb)
+   {
     this.physics.pause();
 
     player.setTint(0xff0000);
@@ -168,10 +188,7 @@ export class Play extends Phaser.Scene {
     // Función timeout usada para llamar la instrucción que tiene adentro despues de X milisegundos
     setTimeout(() => {
       // Instrucción que sera llamada despues del segundo
-      this.scene.start(
-        "Retry",
-        { score: score } // se pasa el puntaje como dato a la escena RETRY
-      );
-    }, 1000); // Ese número es la cantidad de milisegundos
+      this.scene.start("Retry", { score: score }); // se pasa el puntaje como dato a la escena RETRY
+     }, 1000); // Ese número es la cantidad de milisegundos
   }
 }

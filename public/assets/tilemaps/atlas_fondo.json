@@ -1,33 +1,33 @@
 {
 	"textures": [
 		{
-			"image": "platform_atlas.png",
+			"image": "atlas_fondo.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 402,
-				"h": 34
+				"w": 800,
+				"h": 600
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "platform.png",
+					"filename": "sky2.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 400,
-						"h": 32
+						"w": 800,
+						"h": 600
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 400,
-						"h": 32
+						"w": 800,
+						"h": 600
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
-						"w": 400,
-						"h": 32
+						"x": 0,
+						"y": 0,
+						"w": 800,
+						"h": 600
 					}
 				}
 			]
@@ -36,6 +36,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:99f73007326309e014b863e4e031b29a:62d592658bf78d20057cfc31466c1b8d:e0b2e34388d1fe0258fcee2f0a850454$"
+		"smartupdate": "$TexturePacker:SmartUpdate:5ce78a9b66c4c83a496484980e3dd2ad:707bc60174860fa20c9525f7ff088ac4:0062535a9098d3efa9787c0a89eba5aa$"
 	}
 }
